@@ -20,9 +20,9 @@ ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" SHELL=/bin/bash TERM=xterm-256color
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy firefox fonts-ipafont vim && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy firefox fonts-ipafont && \
 rm -rf /var/lib/apt/lists/* && \
-mkdir /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
+mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
 
 RUN \
 : version && xrdp=0.9.5 && xrdp_s=2 && \
@@ -36,6 +36,11 @@ rm -rf .build_xrdp
 
 COPY startup.sh /usr/local/sbin/
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
+
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y vim less && \
+rm -rf /var/lib/apt/lists/*
 
 USER ${INSTALL_USER}
 WORKDIR /home/${INSTALL_USER}
