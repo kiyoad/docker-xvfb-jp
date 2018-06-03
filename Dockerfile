@@ -11,7 +11,7 @@ echo "lang en_US" > /etc/aspell.conf && \
 update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" && \
 cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
 echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata && \
-useradd -u "${UID}" -p $(echo "${INSTALL_USER}" | mkpasswd -s -m sha-512) -m "${INSTALL_USER}" && \
+useradd -u "${UID}" -p $(echo "${INSTALL_USER}" | mkpasswd -s -m sha-512) -m -s /bin/bash "${INSTALL_USER}" && \
 chown -R "${INSTALL_USER}":"${INSTALL_USER}" "/home/${INSTALL_USER}" && \
 echo "${INSTALL_USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${INSTALL_USER}" && \
 chmod 0440 "/etc/sudoers.d/${INSTALL_USER}"
@@ -27,15 +27,19 @@ mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
 RUN \
 : version && xrdp=0.9.5 && xrdp_s=2 && \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y wget build-essential devscripts autoconf libtool pkg-config gcc g++ make libssl-dev libpam0g-dev libjpeg-dev libx11-dev libxfixes-dev libxrandr-dev flex bison libxml2-dev intltool xsltproc xutils-dev python-libxml2 xutils libfuse-dev libmp3lame-dev nasm libpixman-1-dev xserver-xorg-dev && \
+DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y wget autoconf libtool pkg-config gcc g++ make libssl-dev libpam0g-dev libjpeg-dev libx11-dev libxfixes-dev libxrandr-dev flex bison libxml2-dev intltool xsltproc xutils-dev python-libxml2 xutils libfuse-dev libmp3lame-dev nasm libpixman-1-dev xserver-xorg-dev && \
 rm -rf /var/lib/apt/lists/* && \
 wget -q -O - "https://launchpad.net/ubuntu/+archive/primary/+sourcefiles/xrdp/${xrdp}-${xrdp_s}/xrdp_${xrdp}.orig.tar.gz" | tar zxf - && \
 mv xrdp-${xrdp} .build_xrdp && \
-(cd .build_xrdp && ./bootstrap && ./configure --enable-fuse && make install) && \
+(cd .build_xrdp && ./bootstrap && ./configure && make install) && \
+mv /usr/local/sbin/xrdp-chansrv /usr/local/sbin/orig_xrdp-chansrv && \
 rm -rf .build_xrdp
 
 COPY startup.sh /usr/local/sbin/
+COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
+COPY fake_xrdp-chansrv.sh /usr/local/sbin/xrdp-chansrv
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
+RUN sed -i -e "s/USERPASS/${INSTALL_USER}/" /etc/xrdp/xrdp.ini
 
 RUN \
 apt-get update && \
