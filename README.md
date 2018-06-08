@@ -41,7 +41,7 @@ Server:
   Experimental: false
 ```
 
-* a SSH client on your local PC.(Also use the port forwarding function)
+* a SSH client on your local PC.(also use the port forwarding function)
     * Tera Term
 
 * a RDP client or a VNC client on your local PC.
@@ -109,6 +109,8 @@ Server:
     * A valid X display number can be found by the following command.
         * `$ sudo ls /tmp/.X11-unix/`
         * The remainder of the result excluding the leading character 'X' becomes the X display number.
+* The user name in Xfce is the environment variable LOGNAME at the time of container image creation, and the password default is also LOGNAME.
+* The home directory when running Xfce is the same as the home directory of the user who executed the container.
 
 
 ## License
