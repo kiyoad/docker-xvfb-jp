@@ -14,7 +14,7 @@ trap cleanup 1 2 3 15
 
 if [[ $# -ge 1 ]] ;then
     size="${1}x24"
-    sudo sed -i -e "s/1024x768x24/${size}/" /usr/bin/X11/Xvnc
+    sudo sed -i -e "s/1024x768x24/${size}/" -e "s/NONONO/YESYES/" /usr/bin/X11/Xvnc
 fi
 
 if [[ $# -ge 2 ]] ;then
