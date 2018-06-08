@@ -7,7 +7,6 @@ RUN \
 apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y language-pack-ja tzdata sudo whois && \
 rm -rf /var/lib/apt/lists/* && \
-echo "lang en_US" > /etc/aspell.conf && \
 update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" && \
 cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
 echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata && \
