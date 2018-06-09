@@ -51,7 +51,7 @@ Server:
 
 ### Installing
 
-1. If necessary, modify the Dockerfile and localize it.
+1. Localize the Dockerfile as necessary.(Default: Japanese)
     * The following are localized parts.
 
     ```
@@ -59,13 +59,15 @@ Server:
     rm -rf /var/lib/apt/lists/* && \
     update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" && \
     cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-    echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata && \
-    ...
-    ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" SHELL=/bin/bash TERM=xterm-256color
-    ...
-    DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy firefox fonts-ipafont && \
+    echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
+
+    ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
+
+    RUN \
+    apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy fonts-ipafont && \
     ```
-    * Check `language-pack-??`, `LANG`, `LANGUAGE`, `zoneinfo`, input methods and `fonts-???`
+    * Check `language-pack-??`, `LANG`, `LANGUAGE`, `zoneinfo`, input methods(ja:scim-anthy) and `fonts-???`
 
 1. Run `docker_build.sh` and wait a while.
     * `$ ./docker_build.sh`
@@ -109,8 +111,13 @@ Server:
     * A valid X display number can be found by the following command.
         * `$ sudo ls /tmp/.X11-unix/`
         * The remainder of the result excluding the leading character 'X' becomes the X display number.
-* The user name in Xfce is the environment variable LOGNAME at the time of container image creation, and the password default is also LOGNAME.
+* The user name in Xfce is the environment variable LOGNAME at the time of execution the container, and the password default is also LOGNAME.
 * The home directory when running Xfce is the same as the home directory of the user who executed the container.
+
+
+## Bug
+
+* No sound supported.
 
 
 ## License

@@ -1,25 +1,18 @@
 FROM ubuntu:xenial
 
-ARG INSTALL_USER=developer
-ARG UID=1000
-
 RUN \
 apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y language-pack-ja tzdata sudo whois && \
 rm -rf /var/lib/apt/lists/* && \
 update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" && \
 cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
-echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata && \
-useradd -u "${UID}" -p $(echo "${INSTALL_USER}" | mkpasswd -s -m sha-512) -m -s /bin/bash "${INSTALL_USER}" && \
-chown -R "${INSTALL_USER}":"${INSTALL_USER}" "/home/${INSTALL_USER}" && \
-echo "${INSTALL_USER} ALL=(ALL) NOPASSWD: ALL" > "/etc/sudoers.d/${INSTALL_USER}" && \
-chmod 0440 "/etc/sudoers.d/${INSTALL_USER}"
+echo "Asia/Tokyo" > /etc/timezone && dpkg-reconfigure --frontend noninteractive tzdata
 
-ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" SHELL=/bin/bash TERM=xterm-256color
+ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy firefox fonts-ipafont && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy fonts-ipafont && \
 rm -rf /var/lib/apt/lists/* && \
 mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
 
@@ -34,17 +27,15 @@ mv xrdp-${xrdp} .build_xrdp && \
 mv /usr/local/sbin/xrdp-chansrv /usr/local/sbin/orig_xrdp-chansrv && \
 rm -rf .build_xrdp
 
+COPY bootstrap.sh /usr/local/sbin/
 COPY startup.sh /usr/local/sbin/
 COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY fake_xrdp-chansrv.sh /usr/local/sbin/xrdp-chansrv
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
-RUN sed -i -e "s/USERPASS/${INSTALL_USER}/" /etc/xrdp/xrdp.ini
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y vim less && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y firefox vim less && \
 rm -rf /var/lib/apt/lists/*
 
-USER ${INSTALL_USER}
-WORKDIR /home/${INSTALL_USER}
-ENTRYPOINT [ "/usr/local/sbin/startup.sh" ]
+ENTRYPOINT [ "/usr/local/sbin/bootstrap.sh" ]
