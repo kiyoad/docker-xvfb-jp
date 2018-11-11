@@ -35,7 +35,7 @@ COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y firefox vim less && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y firefox ssh && \
 rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT [ "/usr/local/sbin/bootstrap.sh" ]
