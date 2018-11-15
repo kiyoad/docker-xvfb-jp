@@ -33,18 +33,7 @@ if [[ $# -ge 2 ]] ;then
 else
     sudo xrdp
     set +e
-    sudo xrdp-sesman
+    sudo xrdp-sesman -n
     set -e
-
-    while [[ ! -e /var/tmp/fake_Xvnc_display ]]
-    do
-        sleep 1
-    done
-    sleep 2
-    display=$(cat /var/tmp/fake_Xvnc_display)
-    while [[ -e "/tmp/.xrdp/xrdpapi_${display}" ]]
-    do
-        sleep 2
-    done
 fi
 cleanup
