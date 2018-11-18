@@ -12,23 +12,18 @@ fi
 
 sudo sed -i -e "s/XXX/:${display}/" /usr/local/sbin/xrdp-chansrv
 
-stopper(){
-    echo "${pid1} ${pid2}" > /var/tmp/pidpid
-    sudo kill -TERM "$(pgrep Xvfb)" "$(pgrep x11vnc)"
-    sleep 1
-    while ps "${pid1}" "${pid2}" > /dev/null 2>&1
-    do
-        sudo kill -TERM "$(pgrep Xvfb)" "$(pgrep x11vnc)"
-        sleep 1
-    done
-    sudo rm -f "/tmp/.X11-unix/X${display}"
-}
+cat <<EOF | sudo tee /etc/supervisor/conf.d/Xvfb_x11vnc.conf > /dev/null
+[program:Xvfb]
+command=/usr/bin/Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp
+priority=1
+[program:x11vnc]
+command=/usr/bin/x11vnc -display ":${display}" -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw
+priority=2
+EOF
 
-trap stopper TERM INT
-sudo Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp &
-pid1=$!
-sudo x11vnc -display ":${display}" -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw &
-pid2=$!
-wait "${pid1}" "${pid2}"
+trap 'sudo kill $(pgrep supervisord)' TERM INT
+sudo supervisord -n -c /etc/supervisor/supervisord.conf &
+pid=$!
+wait "${pid}"
 trap - TERM INT
-wait "${pid1}" "${pid2}"
+wait "${pid}"
