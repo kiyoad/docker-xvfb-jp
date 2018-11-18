@@ -32,6 +32,7 @@ COPY startup.sh /usr/local/sbin/
 COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY fake_xrdp-chansrv.sh /usr/local/sbin/xrdp-chansrv
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
+COPY docker-xvfb-jp.sesman.ini /etc/xrdp/sesman.ini
 
 RUN \
 apt-get update && \
