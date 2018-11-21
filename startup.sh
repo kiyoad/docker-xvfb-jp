@@ -22,14 +22,17 @@ priority=1
 [program:x11vnc]
 command=/usr/bin/x11vnc -display ":${display}" -reopen -shared -rfbport "${vncport}" -rfbportv6 -1 -repeat -nopw
 priority=2
+autorestart=true
 EOF
 
     export DISPLAY=":${display}"
     sudo supervisord -c /etc/supervisor/supervisord.conf
-    sleep 2
     while :
     do
+        sleep 2
         startxfce4
+        kill $(ps --no-header -u "${USER}" | grep -v "$(basename $0)" | awk '{print $1;}') > /dev/null 2>&1
+        sudo kill -HUP $(pgrep supervisord)
     done
 else
     sudo rm -f "/tmp/.X11-unix/X10"

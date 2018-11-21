@@ -19,6 +19,7 @@ priority=1
 [program:x11vnc]
 command=/usr/bin/x11vnc -display ":${display}" -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw
 priority=2
+autorestart=true
 EOF
 
 trap 'sudo kill $(pgrep supervisord)' TERM INT
