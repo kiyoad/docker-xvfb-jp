@@ -30,7 +30,7 @@ EOF
     while :
     do
         sleep 2
-        startxfce4
+        x-session-manager
         kill $(ps --no-header -u "${USER}" | grep -v "$(basename $0)" | awk '{print $1;}') > /dev/null 2>&1
         sudo kill -HUP $(pgrep supervisord)
     done
