@@ -21,24 +21,23 @@ What things you need to install the software.
 ```
 $ docker version
 Client:
- Version:      18.03.1-ce
- API version:  1.37
- Go version:   go1.9.5
- Git commit:   9ee9f40
- Built:        Thu Apr 26 07:17:20 2018
- OS/Arch:      linux/amd64
- Experimental: false
- Orchestrator: swarm
+ Version:           18.09.0
+ API version:       1.39
+ Go version:        go1.10.4
+ Git commit:        4d60db4
+ Built:             Wed Nov  7 00:48:57 2018
+ OS/Arch:           linux/amd64
+ Experimental:      false
 
-Server:
+Server: Docker Engine - Community
  Engine:
-  Version:      18.03.1-ce
-  API version:  1.37 (minimum version 1.12)
-  Go version:   go1.9.5
-  Git commit:   9ee9f40
-  Built:        Thu Apr 26 07:15:30 2018
-  OS/Arch:      linux/amd64
-  Experimental: false
+  Version:          18.09.0
+  API version:      1.39 (minimum version 1.12)
+  Go version:       go1.10.4
+  Git commit:       4d60db4
+  Built:            Wed Nov  7 00:16:44 2018
+  OS/Arch:          linux/amd64
+  Experimental:     false
 ```
 
 * a SSH client on your local PC.(also use the port forwarding function)
@@ -101,7 +100,7 @@ Server:
         1. Connect to 127.0.0.1:5900 with the VNC client on the local PC.
         1. Successful when Xfce's desktop is displayed.
 
-1. Choosing 'Logout' from the Xfce desktop application menu will terminate the container.
+1. Choosing 'Logout' from the Xfce desktop application menu will terminate your RDP/VNC client connetion. But the container does not stop. Container should be stopped with `docker stop xvfb`.
 
 
 ## Note
