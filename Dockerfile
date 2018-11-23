@@ -12,7 +12,7 @@ ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy fonts-ipafont && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y supervisor xvfb x11vnc xfce4 xfce4-goodies scim-anthy fonts-ipafont && \
 rm -rf /var/lib/apt/lists/* && \
 mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
 
@@ -32,6 +32,7 @@ COPY startup.sh /usr/local/sbin/
 COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY fake_xrdp-chansrv.sh /usr/local/sbin/xrdp-chansrv
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
+COPY docker-xvfb-jp.sesman.ini /etc/xrdp/sesman.ini
 
 RUN \
 apt-get update && \

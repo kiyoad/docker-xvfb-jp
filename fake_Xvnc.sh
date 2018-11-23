@@ -1,5 +1,5 @@
 #!/bin/bash
-set -e
+
 display=${1#:}
 argsize="${5}x24"
 fixed=nonono
@@ -11,6 +11,20 @@ else
 fi
 
 sudo sed -i -e "s/XXX/:${display}/" /usr/local/sbin/xrdp-chansrv
-sudo Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp &
-sudo x11vnc -display ":${display}" -loop -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw &
-echo "${display}" > /var/tmp/fake_Xvnc_display
+
+cat <<EOF | sudo tee /etc/supervisor/conf.d/Xvfb_x11vnc.conf > /dev/null
+[program:Xvfb]
+command=/usr/bin/Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp
+priority=1
+[program:x11vnc]
+command=/usr/bin/x11vnc -display ":${display}" -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw
+priority=2
+autorestart=true
+EOF
+
+trap 'sudo kill $(pgrep supervisord)' TERM INT
+sudo supervisord -n -c /etc/supervisor/supervisord.conf &
+pid=$!
+wait "${pid}"
+trap - TERM INT
+wait "${pid}"
