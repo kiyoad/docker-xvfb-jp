@@ -10,8 +10,6 @@ else
     size=1024x768x24
 fi
 
-sudo sed -i -e "s/XXX/:${display}/" /usr/local/sbin/xrdp-chansrv
-
 cat <<EOF | sudo tee /etc/supervisor/conf.d/Xvfb_x11vnc.conf > /dev/null
 [program:Xvfb]
 command=/usr/bin/Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp
