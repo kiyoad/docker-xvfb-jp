@@ -32,6 +32,14 @@ apt-get update && \
 DEBIAN_FRONTEND=noninteractive apt-get install -q -y code && \
 rm -rf /var/lib/apt/lists/*
 
+RUN \
+  : version && node=10.14.0 && \
+  wget -q -O - https://nodejs.org/dist/v${node}/node-v${node}-linux-x64.tar.xz | tar -C /usr/local -xJf - && \
+  chown -R root:root /usr/local/node-v${node}-linux-x64 && \
+  export PATH=/usr/local/node-v${node}-linux-x64/bin:${PATH} && \
+  npm install -g --production eslint && \
+  (cd /usr/local/node-v${node}-linux-x64 && find bin -xtype f -exec ln -s /usr/local/node-v${node}-linux-x64/{} /usr/local/{} \;)
+
 COPY bootstrap.sh /usr/local/sbin/
 COPY startup.sh /usr/local/sbin/
 COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
