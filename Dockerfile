@@ -22,9 +22,4 @@ COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
 COPY docker-xvfb-jp.sesman.ini /etc/xrdp/sesman.ini
 
-RUN \
-apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y firefox && \
-rm -rf /var/lib/apt/lists/*
-
 ENTRYPOINT [ "/usr/local/sbin/bootstrap.sh" ]
