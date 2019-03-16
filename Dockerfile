@@ -12,15 +12,9 @@ ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y git supervisor xvfb x11vnc xrdp uim-anthy fonts-ipafont ubuntu-mate-core && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y supervisor xvfb x11vnc xrdp uim-anthy fonts-ipafont fonts-ricty-diminished ubuntu-mate-core && \
 rm -rf /var/lib/apt/lists/* && \
 mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
-
-RUN \
-git clone https://github.com/edihbrandon/RictyDiminished.git && \
-mv RictyDiminished/*.ttf /usr/local/share/fonts/ && \
-rm -rf RictyDiminished && \
-fc-cache -fv
 
 COPY bootstrap.sh /usr/local/sbin/
 COPY startup.sh /usr/local/sbin/
