@@ -22,28 +22,15 @@ mv RictyDiminished/*.ttf /usr/local/share/fonts/ && \
 rm -rf RictyDiminished && \
 fc-cache -fv
 
-RUN \
-apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y apt-transport-https gvfs-bin compizconfig-settings-manager && \
-curl https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > microsoft.gpg && \
-install -o root -g root -m 644 microsoft.gpg /etc/apt/trusted.gpg.d/ && \
-echo "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main" > /etc/apt/sources.list.d/vscode.list && \
-apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y code && \
-rm -rf /var/lib/apt/lists/*
-
-RUN \
-  : version && node=10.14.0 && \
-  wget -q -O - https://nodejs.org/dist/v${node}/node-v${node}-linux-x64.tar.xz | tar -C /usr/local -xJf - && \
-  chown -R root:root /usr/local/node-v${node}-linux-x64 && \
-  export PATH=/usr/local/node-v${node}-linux-x64/bin:${PATH} && \
-  npm install -g --production eslint && \
-  (cd /usr/local/node-v${node}-linux-x64 && find bin -xtype f -exec ln -s /usr/local/node-v${node}-linux-x64/{} /usr/local/{} \;)
-
 COPY bootstrap.sh /usr/local/sbin/
 COPY startup.sh /usr/local/sbin/
 COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
 COPY docker-xvfb-jp.sesman.ini /etc/xrdp/sesman.ini
+
+RUN \
+apt-get update && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y firefox && \
+rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT [ "/usr/local/sbin/bootstrap.sh" ]
