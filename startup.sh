@@ -20,7 +20,7 @@ if [[ $# -ge 2 ]] ;then
 command=/usr/bin/Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp
 priority=1
 [program:x11vnc]
-command=/usr/bin/x11vnc -display "WAIT:${display}" -reopen -shared -rfbport "${vncport}" -rfbportv6 -1 -repeat -nopw
+command=/usr/bin/x11vnc -display "WAIT:${display}" -reopen -shared -rfbport "${vncport}" -rfbportv6 -1 -repeat -nopw -noxrecord
 priority=2
 autorestart=true
 EOF

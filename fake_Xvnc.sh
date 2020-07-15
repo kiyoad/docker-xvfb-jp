@@ -15,7 +15,7 @@ cat <<EOF | sudo tee /etc/supervisor/conf.d/Xvfb_x11vnc.conf > /dev/null
 command=/usr/bin/Xvfb ":${display}" -screen 0 "${size}" -nolisten tcp
 priority=1
 [program:x11vnc]
-command=/usr/bin/x11vnc -display "WAIT:${display}" -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw
+command=/usr/bin/x11vnc -display "WAIT:${display}" -reopen -shared -localhost -rfbport "$(( 5900 + display ))" -rfbportv6 -1 -repeat -nopw -noxrecord
 priority=2
 autorestart=true
 EOF
