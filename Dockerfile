@@ -24,4 +24,6 @@ COPY fake_Xvnc.sh /usr/bin/X11/Xvnc
 COPY docker-xvfb-jp.xrdp.ini /etc/xrdp/xrdp.ini
 COPY docker-xvfb-jp.sesman.ini /etc/xrdp/sesman.ini
 
+RUN mkdir /home/xvfb
+
 ENTRYPOINT [ "/usr/local/sbin/bootstrap.sh" ]
