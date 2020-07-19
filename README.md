@@ -110,8 +110,8 @@ Server: Docker Engine - Community
     * A valid X display number can be found by the following command.
         * `$ sudo ls /tmp/.X11-unix/`
         * The remainder of the result excluding the leading character 'X' becomes the X display number.
-* The user name in Xfce is the environment variable LOGNAME at the time of execution the container, and the password default is also LOGNAME.
-* The home directory when running Xfce is the same as the home directory of the user who executed the container.
+* The user name in Xfce is `xvfb`, and the password default is the environment variable LOGNAME at the time of execution the container. Please check `xvfb.sh`.
+* The home directory when running Xfce is `/home/xvfb`. Your home directory also mounts at `/home/${LOGNAME}`
 
 
 ## Bug
