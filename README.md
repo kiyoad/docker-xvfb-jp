@@ -116,7 +116,7 @@ Server: Docker Engine - Community
 
 ## Bug
 
-* No sound supported.
+* The first RDP login may fail. You can connect by closing the RDP client and restarting it.
 
 
 ## License
