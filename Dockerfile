@@ -29,7 +29,7 @@ ENV LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja"
 
 RUN \
 apt-get update && \
-DEBIAN_FRONTEND=noninteractive apt-get install -q -y supervisor xvfb x11vnc xrdp uim-anthy fonts-ipafont fonts-ricty-diminished vim less ubuntu-desktop && \
+DEBIAN_FRONTEND=noninteractive apt-get install -q -y supervisor xvfb x11vnc xrdp ibus-mozc mozc-utils-gui fonts-ipafont fonts-ricty-diminished vim less ubuntu-desktop && \
 rm -rf /var/lib/apt/lists/* && \
 mkdir -p /tmp/.X11-unix && chmod a+rwxt /tmp/.X11-unix
 
