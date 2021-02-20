@@ -54,7 +54,7 @@ Server: Docker Engine - Community
     * The following are localized parts.
 
     ```
-    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y language-pack-ja tzdata sudo whois && \
+    DEBIAN_FRONTEND=noninteractive apt-get install --no-install-recommends -q -y language-pack-ja tzdata sudo whois ssh apt-utils && \
     rm -rf /var/lib/apt/lists/* && \
     update-locale LANG=ja_JP.UTF-8 LANGUAGE="ja_JP:ja" && \
     cp -p /usr/share/zoneinfo/Asia/Tokyo /etc/localtime && \
@@ -64,9 +64,9 @@ Server: Docker Engine - Community
 
     RUN \
     apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -q -y xvfb x11vnc xfce4 xfce4-goodies scim-anthy fonts-ipafont && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -q -y supervisor xvfb x11vnc xrdp ibus-mozc mozc-utils-gui fonts-ipafont fonts-ricty-diminished vim less ubuntu-mate-core && \
     ```
-    * Check `language-pack-??`, `LANG`, `LANGUAGE`, `zoneinfo`, input methods(ja:scim-anthy) and `fonts-???`
+    * Check `language-pack-??`, `LANG`, `LANGUAGE`, `zoneinfo`, input methods(ja:ibus-mozc) and `fonts-???`
 
 1. Run `docker_build.sh` and wait a while.
     * `$ ./docker_build.sh`
@@ -95,12 +95,12 @@ Server: Docker Engine - Community
         1. Connect to 127.0.0.1:13389 with the RDP client on the local PC.
         1. Check the security dialog and select 'YES'.
         1. Confirm that the session dialog of xrdp is 'Direct' and select 'YES'.
-        1. Successful when Xfce's desktop is displayed.
+        1. Successful when ubuntu-mate's desktop is displayed.
     * In VNC connection mode.
         1. Connect to 127.0.0.1:5900 with the VNC client on the local PC.
-        1. Successful when Xfce's desktop is displayed.
+        1. Successful when ubuntu-mate's desktop is displayed.
 
-1. Choosing 'Logout' from the Xfce desktop application menu will terminate your RDP/VNC client connetion. But the container does not stop. Container should be stopped with `docker stop xvfb`.
+1. Choosing 'Logout' from the ubuntu-mate desktop application menu will terminate your RDP/VNC client connetion. But the container does not stop. Container should be stopped with `docker stop xvfb`.
 
 
 ## Note
@@ -110,8 +110,8 @@ Server: Docker Engine - Community
     * A valid X display number can be found by the following command.
         * `$ sudo ls /tmp/.X11-unix/`
         * The remainder of the result excluding the leading character 'X' becomes the X display number.
-* The user name in Xfce is `xvfb`, and the password default is the environment variable LOGNAME at the time of execution the container. Please check `xvfb.sh`.
-* The home directory when running Xfce is `/home/xvfb`. Your home directory also mounts at `/home/${LOGNAME}`
+* The user name in ubuntu-mate is `xvfb`, and the password default is the environment variable LOGNAME at the time of execution the container. Please check `xvfb.sh`.
+* The home directory when running ubuntu-mate is `/home/xvfb`. Your home directory also mounts at `/home/${LOGNAME}`
 
 
 ## Bug
